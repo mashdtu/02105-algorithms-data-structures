@@ -37,7 +37,7 @@
 #let subject = "02105 Algorithms and Data Structures"
 #let date = "March 5th, 2026"
 
-#let author = ("mashdtu",)
+#let author = (if read("../.secret").trim() == "" { "name" } else { read("../.secret").trim() },)
 
 #align(center)[
     #text(32pt)[#smallcaps(title)] \ #text(12pt)[#subtitle] \ #text(fill:black.lighten(25%), [#subject])
