@@ -67,7 +67,7 @@
 #let subject = "02105 Algorithms & Data Structures 1"
 #let date = "March 4th, 2026"
 
-#let author = ("mashdtu",)
+#let author = (if read(".secret").trim() == "" { "name" } else { read(".secret").trim() },)
 
 #align(center)[
     #text(32pt)[#smallcaps(title)] \ #text(18pt)[#subtitle] \ #text(fill: black.lighten(25%), [#subject])
@@ -267,30 +267,141 @@ Consider building a team $T$ of superheroes from a set $S$ of available superher
 
 #ansline
 
+*Naive approach*
+\
+```
+MergeSort(A, i, j)
+    if i < j
+        m = floor((i+j)/2)
+        MergeSort(A, i, m)
+        MergeSort(A, m+1, j)
+        Merge(A, i, m, j)
 
+Alg1(A, m)
+    sum = 0
+    MergeSort(A, 1, m)
+    for i = 0 to 6 do
+        sum += i
+    end for
+    return sum
+```
 
+Sorting the array using mergesort takes $O(m log m)$ time and summing the first 7 elements takes $O(1)$ time. Thus, the time complexity of the algorithm is $O(m log m)$.
+\ \
+
+*Effecient approach*
+\
+```
+Alg2(A, m)
+    sum = 0
+    for i = 0 to 6 do
+        min = i
+        for j = i+1 to m-2 do
+            if A[j] < A[min] do
+                min = j
+        end for
+        sum += A[min]
+    end for
+    return sum
+```
+
+The outer loop takes $O(7) = O(1)$ time, while the inner loop takes $O(m - i - 2) = O(m)$ time. Since $O(m)$ grows faster than $O(1)$, the time complexity is $O(m)$.
 
 
 #ansline
 
 
+#pagebreak()
 == As exercise 2.1 but now we want an algorithm that computes the cost of a cheapest team of $floor(sqrt(m))$ superheroes. Analyse the running time of your algorithm in terms of parameter $m$.
 
 #ansline
 
+*Naive approach*
+\
+```
+MergeSort(A, i, j)
+    if i < j
+        m = floor((i+j)/2)
+        MergeSort(A, i, m)
+        MergeSort(A, m+1, j)
+        Merge(A, i, m, j)
+
+Alg1(A, m)
+    sum = 0
+    MergeSort(A, 1, m)
+    for i = 0 to floor(sqrt(m)) do
+        sum += i
+    end for
+    return sum
+```
+
+Sorting the array using mergesort takes $O(m log m)$ time and summing the first 7 elements takes $O(sqrt(m))$ time. Combined, the time complexity of the algorithm is $O(m log m + sqrt(m))$. Since $O(m log m)$ has a larger asymptotic growth factor than $O(sqrt(m))$ for large $m$-values, the time complexity of the algorithm is $O(m log m)$.
+\ \
+
+*Effecient approach*
+\
+```
+Alg2(A, m)
+    sum = 0
+    k = floor(sqrt(m))
+    for i = 0 to k-1 do
+        min = i
+        for j = i+1 to m-2 do
+            if A[j] < A[min] do
+                min = j
+        end for
+        sum += A[min]
+    end for
+    return sum
+```
+
+The outer loop takes $O(k-1) = O(k) = O(floor(sqrt(m))) = O(sqrt(m))$ time, while the inner loop takes $O(m - i - 2) = O(m)$ time. Since $O(m)$ grows faster than $O(sqrt(m))$, the time complexity is $O(m)$.
 
 
 #ansline
 
 
+#pagebreak()
 == Give an algorithm that computes the number of _distinct_ costs of superheroes, i.e., the number of different costs of the superheroes in $S$. Analyse the running time of your algorithm in terms of parameter $m$.
 
 #ansline
 
+*Efficient approach*
+\
+```
+MergeSort(A, i, j)
+    if i < j
+        m = floor((i+j)/2)
+        MergeSort(A, i, m)
+        MergeSort(A, m+1, j)
+        Merge(A, i, m, j)
 
+Alg1(A, m)
+    MergeSort(A, 1, m)
+    d = 0
+    for i = 0 to m-2 do
+        if A[i] != A[i+1] do
+            d += 1
+    end for
+    return d
+```
+
+Sorting the array using mergesort takes $O(m log m)$ time and comparing each element takes $O(m)$ time. Since $O(m log m)$ has a larger asymptotic growth factor than $O(m)$ for large $m$-values, the time complexity of the algorithm is $O(m log m)$.
+\ \
+
+*Alternative approach*
+\
+```
+Alg2(A, m)
+    H = empty hashmap
+    for i = 0 to m-1 do
+        if A[i] not in dom(H) do
+            H[A[i]] = true
+    end for
+    return |dom(H)|
+```
+
+This algorithm contains only one loop from 0 to m, which takes $O(m)$ times. As such, the algorithm is of time complexity $O(m)$.
 
 #ansline
-
-
-
 
