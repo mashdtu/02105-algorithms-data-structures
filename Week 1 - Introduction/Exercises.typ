@@ -1,16 +1,47 @@
 #import "@preview/diagraph:0.3.6": *
+#import "@preview/chic-hdr:0.5.0": *
+#import "@preview/rexllent:0.4.0": *
 
 #show heading: set block(above: 2em)
 #show heading: set block(below: 1em)
 #show link: it => underline(text(fill: blue)[#it])
-#show heading.where(level: 3): set heading(outlined: false)
+#show selector(<nonumber>): set heading(numbering: none)
+
+#let first-heading = state("first-heading", true)
+#show heading.where(level: 1): it => {
+    context if first-heading.get() {
+        first-heading.update(false)
+        it
+    } else {
+        pagebreak(weak: true) + it
+    }
+}
+
+#let numberingH(c) = {
+    if c.numbering != none {
+        return numbering(c.numbering, ..counter(heading).at(c.location()))
+    }
+    return ""
+}
+
+#let currentH(level) = {
+    let elems = query(selector(heading.where(level: level)).after(here()))
+
+    if elems.len() != 0 and elems.first().location().page() == here().page() {
+        return [#numberingH(elems.first()) #elems.first().body]
+    } else {
+        elems = query(selector(heading.where(level: level)).before(here()))
+        if elems.len() != 0 {
+            return [#numberingH(elems.last()) #elems.last().body]
+        }
+    }
+    return ""
+}
 
 #set page(
     paper: "a4",
     margin: (x: 2.5cm, y: 2.5cm),
-    numbering: "1 of 1",
     number-align: right,
-    header: none
 )
 
 #set par(
@@ -19,7 +50,7 @@
 
 #set text(
     font: "New Computer Modern",
-    size: 12pt
+    size: 12pt,
 )
 
 #set heading(
@@ -29,23 +60,24 @@
 #let ansline = line(
     start: (0%, 0%),
     end: (100%, 0%),
-    stroke: (thickness: 1pt, dash: "dashed")
+    stroke: (thickness: 1pt, dash: "dashed"),
 )
 
-#let title = "Week 1 Exercise Sheet"
-#let subtitle = "Basic Concepts I: Introduction, Algorithms, Data Structures, Peaks"
-#let subject = "02105 Algorithms and Data Structures"
-#let date = "February 5th, 2026"
+#let title = "Hand-in Exercise 2"
+#let subtitle = "The Game of Pacman"
+#let subject = "02105 Algorithms & Data Structures 1"
+#let date = "March 26th, 2026"
 
 #let author = (if read("../.secret").trim() == "" { "name" } else { read("../.secret").trim() },)
 
 #align(center)[
-    #text(32pt)[#smallcaps(title)] \ #text(14pt)[#subtitle] \ #text(fill:black.lighten(25%), [#subject])
+    #text(32pt)[#smallcaps(title)] \ #text(18pt)[#subtitle] \ #text(fill: black.lighten(25%), [#subject])
 ]
 
 #{
-    grid(columns: (1fr,) * author.len(),
-        column-gutter: 2pt,
+    grid(
+        columns: (1fr,) * author.len(),
+        column-gutter: -120pt,
         ..author.map(a => align(center)[#a])
     )
 }
@@ -54,34 +86,16 @@
     #date
 ]
 
-//#v(16pt)
-//#grid(columns: (1cm, 1fr, 1cm),
-//    column-gutter: 2pt,
-//    [],
-//    [- The number of #sym.star.filled's gives a rough indicator of the task's difficulty. You should aim to solve at least all tasks with at most three #sym.star.filled's. Tasks with more stars can be hard or require mathematical background that you should have from previous courses.
-//
-//    - You can always ask us for feedback or help during the exercise class.
-//
-//    - We recommend that you first read all tasks during class. Make sure that you have a rough approach for every task in mind before you start working on the details. Ask for help if a task is unclear such that you do not get stuck when we are not there to help.],
-//    []
-//)
 
-//#pagebreak()
 #outline()
-
-//#v(16pt)
-//#grid(columns: (1cm, 1fr, 1cm),
-//    column-gutter: 2pt,
-//    [],
-//    [],
-//    []
-//)
-
-    
-
 #pagebreak()
 
-
+#counter(page).update(1)
+#show: chic.with(
+    chic-footer(
+        right-side: "Page " + context str(counter(page).get().first()) + " of " + str(counter(page).final().first()),
+    ),
+)
 
 
 = Find Peaks
@@ -120,6 +134,13 @@ This algorithm is also applied from left to right, i.e. from smallest index to l
 
 
 == Specify the sequence of recursive calls the recursive algorithm produces. First, assume the algorithm visits the left half of the array if both directions are valid. Then, specify all the possible sequences of recursive calls the algorithm can make when picking any of the two valid directions.
+
+
+
+
+
+
+
 
 
 
