@@ -35,7 +35,7 @@
 #let title = "Week 2 Exercise Sheet"
 #let subtitle = "Basic Concepts II: Searching, Sorting"
 #let subject = "02105 Algorithms and Data Structures"
-#let date = "February 5th, 2026"
+#let date = "February 12th, 2026"
 
 #let author = (if read("../.secret").trim() == "" { "name" } else { read("../.secret").trim() },)
 
